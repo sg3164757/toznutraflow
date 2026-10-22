@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "Organization": {
+      "title": "Organization",
+      "description": "Tenant business entity",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "subscription": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["name", "ownerId", "status"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Potential customer lead",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "pincode": { "type": "string" },
+        "status": { "type": "string" },
+        "value": { "type": "number" },
+        "source": { "type": "string" },
+        "assignedTo": { "type": "string" },
+        "assignedToId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" },
+        "ltv": { "type": "number" }
+      },
+      "required": ["orgId", "name", "status", "assignedToId", "phone"]
+    },
+    "InventoryItem": {
+      "title": "Inventory Item",
+      "description": "Product in stock",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "name": { "type": "string" },
+        "sku": { "type": "string" },
+        "stock": { "type": "number" },
+        "lowStockThreshold": { "type": "number" },
+        "price": { "type": "number" },
+        "category": { "type": "string" }
+      },
+      "required": ["orgId", "name", "sku", "stock", "price"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "leadId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "phone": { "type": "string" },
+        "product": { "type": "string" },
+        "quantity": { "type": "number" },
+        "total": { "type": "number" },
+        "status": { "type": "string" },
+        "commission": { "type": "number" },
+        "assignedToId": { "type": "string" },
+        "trackingId": { "type": "string" },
+        "courierPartner": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orgId", "customerId", "product", "quantity", "status", "total"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Sales tasks and refills",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" },
+        "leadId": { "type": "string" },
+        "status": { "type": "string" },
+        "type": { "type": "string" }
+      },
+      "required": ["orgId", "title", "userId", "dueDate"]
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "System activity logs",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "action": { "type": "string" },
+        "entityId": { "type": "string" },
+        "entityType": { "type": "string" },
+        "details": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orgId", "userId", "action", "timestamp"]
+    },
+    "PostbackConfig": {
+      "title": "Postback Configuration",
+      "description": "S2S Postback integration settings for ad networks like TrafficStars",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "name": { "type": "string" },
+        "adNetwork": { "type": "string" },
+        "postbackUrl": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orgId", "name", "postbackUrl", "adNetwork"]
+    },
+    "PostbackLog": {
+      "title": "Postback Log",
+      "description": "Execution records and responses of fired postbacks",
+      "type": "object",
+      "properties": {
+        "orgId": { "type": "string" },
+        "leadId": { "type": "string" },
+        "clickId": { "type": "string" },
+        "adNetwork": { "type": "string" },
+        "event": { "type": "string" },
+        "status": { "type": "string" },
+        "url": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orgId", "leadId", "clickId", "status", "url", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/organizations/{orgId}": {
+      "schema": "Organization",
+      "description": "Tenant business data"
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Sales leads collection"
+    },
+    "/inventory/{itemId}": {
+      "schema": "InventoryItem",
+      "description": "Product inventory collection"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders collection"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Tasks for refills and callbacks"
+    },
+    "/logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Security audit logs"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Staff account data"
+    },
+    "/postbacks/{postbackId}": {
+      "schema": "PostbackConfig",
+      "description": "Postback configurations collection"
+    },
+    "/postbackLogs/{logId}": {
+      "schema": "PostbackLog",
+      "description": "Postback execution logs collection"
+    }
+  }
+}
